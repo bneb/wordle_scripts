@@ -4,7 +4,7 @@ from math import exp
 
 # I scraped a website and saved data to the file below.
 # One could also use nltk which might be easier /shrug.
-with open('5letterwords.txt', 'r') as f:
+with open('five_letter_words.txt', 'r') as f:
     words = {w.strip() for w in f.read().split('\n')}
 
 # counts a letter per occurance in all words
@@ -38,7 +38,7 @@ def score(word1, word2, word3):
     score = 0
     for i, l in enumerate(word1 + word2 + word3):
         letter_score = freq_means[l]
-        scalar = exp(-i//5 - abs(i%5 - letter_pos[l]))
+        scalar = exp(-abs(i%5 - letter_pos[l])/(5+i//5))
         score += letter_score * scalar
     return score
 

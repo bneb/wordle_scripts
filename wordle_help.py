@@ -1,13 +1,13 @@
 from ast import literal_eval
 from collections import Counter
 from math import exp
+from nltk.corpus import brown
+from gen_words import WORD_FILE_PATH
 
 HOT_CHARS = set('_abcdefghijklmnopqrstuvwxyz')
 
-
 def main():
-    with open('5letterwords.txt', 'r') as f:
-        words = {w.strip() for w in f.read().strip().split('\n')}
+    with open(WORD_FILE_PATH, 'r') as f: words = f.read().strip().split('\n')
 
     freq = Counter([l for w in words for l in w])
     hot = get_hot()
@@ -88,7 +88,7 @@ def score(word, freq, letter_pos):
 
     for i, l in enumerate(word):
         letter_freq = freq[l]
-        scalar = exp(-letter_pos[l])
+        scalar = exp(-3*abs(i-letter_pos[l]))
         score += letter_freq * scalar
 
     return score
@@ -138,11 +138,6 @@ def filter_words(hot, warm, cold, words):
 def get_overall_freq(words):
     '''Return the frequency of all letters over all words.'''
     return Counter(c for w in words for c in w)
-
-
-def get_words():
-    with open('5letterwords.txt', 'r') as f:
-        return {w.strip() for w in f.read().split('\n')}
 
 
 if __name__ == '__main__':

@@ -1,18 +1,18 @@
 from nltk import download
 from nltk.corpus import brown
-
-WORD_FILE_PATH = './five_letter_words.txt'
-
+from wordle import PATH
 
 def main():
     print('downloading brown')
     download('brown')
     print(' - done')
+
     print('preparing word list')
-    words = {w.lower() for w in brown.words() if len(w) == 5 and w.isalpha()}
+    data = {w.lower() for w in brown.words() if len(w) == 5 and w.islower()}
     print(' - done')
-    print(f'writing to {WORD_FILE_PATH}')
-    with open(WORD_FILE_PATH, 'w') as f: f.write('\n'.join(words))
+
+    print(f'writing to {PATH}')
+    with open(PATH, 'w') as f: f.write('\n'.join(data))
     print(' - done')
 
 

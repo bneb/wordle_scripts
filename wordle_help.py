@@ -1,34 +1,34 @@
 from ast import literal_eval
 from collections import Counter
 from math import exp
-from nltk.corpus import brown
-from gen_words import WORD_FILE_PATH
+from wordle import get_words
 
-HOT_CHARS = set('_abcdefghijklmnopqrstuvwxyz')
 
 def main():
-    with open(WORD_FILE_PATH, 'r') as f: words = f.read().strip().split('\n')
+    words = get_words()
 
     freq = Counter([l for w in words for l in w])
+
     hot = get_hot()
     warm = get_warm()
-    cold = get_cold()
-    cold -= set(hot)
-    cold -= set(warm)
+    cold = get_cold(warm, hot)
 
     guesses = get_next_guess(hot, warm, cold, words, freq)
+
     print('\nThe next best guesses are:')
-    for score, guess in guesses[:-10:-1]:
-        print(f'  - {score = :.2f} :: {guess = }')
+    for score, guess in guesses[:10]:
+        print(f'  {score:.3f} :: {guess}')
 
 
 def get_hot():
-    print('\nenter in the partially filled target. example: f_nny:')
+    print('\nenter in the partially filled target.')
+    print('  example: f_nny:')
     found = False
+    chars = set('_abcdefghijklmnopqrstuvwxyz')
 
     while not found:
         hot = input('  -> ')
-        found = (len(hot) == 5 and set(hot).issubset(HOT_CHARS))
+        found = len(hot) == 5 and set(hot).issubset(chars)
         if not found:
             print('  invalid. try again.')
 
@@ -47,15 +47,13 @@ def get_warm():
     return warm
 
 
-def get_cold():
-    print('\nenter in the set of non-matches. example: {"a", "b"}')
-    cold = None
+def get_cold(warm, hot):
+    print('\nenter in your prior guesses (spaces optional).')
+    print('  example: quick words elate')
 
-    while cold is None:
-        try: cold = literal_eval(input('  -> ').strip())
-        except: print('  invalid. try again.')
+    cold = set(input('  -> ')) - {' '}
 
-    return cold
+    return cold - set(warm.keys()) - set(hot)
 
 
 def get_next_guess(hot, warm, cold, words, freq):
@@ -66,15 +64,20 @@ def get_next_guess(hot, warm, cold, words, freq):
     @returns a five letter guess for the next round
     '''
     filtered = filter_words(hot, warm, cold, words)
-    letter_pos = get_avg_letter_position(filtered)
-    ranked = score_all(filtered, freq, letter_pos)
+    l_pos = get_avg_letter_position(filtered)
+    ranked = score_all(filtered, freq, l_pos)
 
     return ranked
 
 
-def score_all(words, freq, letter_pos):
-    '''Return score-word-pairs in ascending order by score.'''
-    return sorted([(score(w, freq, letter_pos), w) for w in words])
+def score_all(words, freq, l_pos):
+    '''Returns pairs of (scaled_score, words) for all words.'''
+    ranked = sorted([(score(w, freq, l_pos), w) for w in words], reverse=True)
+    top_score = ranked[0][0]
+    scaled_scores = [(r[0]/top_score, r[1]) for r in ranked]
+
+    return scaled_scores
+
 
 
 def score(word, freq, letter_pos):
@@ -87,9 +90,9 @@ def score(word, freq, letter_pos):
     score = 0
 
     for i, l in enumerate(word):
-        letter_freq = freq[l]
-        scalar = exp(-3*abs(i-letter_pos[l]))
-        score += letter_freq * scalar
+        freq_score = freq[l]
+        pos_score = exp(-3*abs(i-letter_pos.get(l, 2)))
+        score += freq_score * pos_score
 
     return score
 
@@ -125,9 +128,10 @@ def filter_words(hot, warm, cold, words):
             if i in warm.get(l,set()):
                 found = False
                 break
-            if not all([w in word for w in warm]):
-                found = False
-                break
+            for w in warm:
+                if w not in word:
+                    found = False
+                    break
 
         if found:
             filtered.append(word)

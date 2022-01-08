@@ -1,0 +1,87 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Hello Wordle</title>
+  <meta name="description" content="Predicting the Wordle of the day.">
+  <meta name="author" content="bneb">
+
+  <meta property="og:title" content="Wordle Solver">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://bneb.github.io/wordle_scripts">
+  <meta property="og:description" content="Predicting the Wordle of the day.">
+  <meta property="og:image" content="image.png">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div id="game">
+    <header>
+      <div class="title">🐢 WORDLE TURTLE 🐢</div>
+      <p> Type your letters into the boxes.</p>
+      <p> Click a letter to make it yellow.</p>
+      <p> Click it again to make it green.</p>
+      <p> A good guess is in the last row.</p>
+    </header>
+
+    <div id="board-container">
+      <div id="board">
+        <div id="row1">
+          <input type="text" id="c11">
+          <input type="text" id="c12">
+          <input type="text" id="c13">
+          <input type="text" id="c14">
+          <input type="text" id="c15">
+        </div>
+        <div id="row2">
+          <input type="text" id="c21">
+          <input type="text" id="c22">
+          <input type="text" id="c23">
+          <input type="text" id="c24">
+          <input type="text" id="c25">
+        </div>
+        <div id="row3">
+          <input type="text" id="c31">
+          <input type="text" id="c32">
+          <input type="text" id="c33">
+          <input type="text" id="c34">
+          <input type="text" id="c35">
+        </div>
+        <div id="row4">
+          <input type="text" id="c41">
+          <input type="text" id="c42">
+          <input type="text" id="c43">
+          <input type="text" id="c44">
+          <input type="text" id="c45">
+        </div>
+        <div id="row5">
+          <input type="text" id="c51">
+          <input type="text" id="c52">
+          <input type="text" id="c53">
+          <input type="text" id="c54">
+          <input type="text" id="c55">
+        </div>
+        <div id="row6">
+          <input type="text" id="c61">
+          <input type="text" id="c62">
+          <input type="text" id="c63">
+          <input type="text" id="c64">
+          <input type="text" id="c65">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>

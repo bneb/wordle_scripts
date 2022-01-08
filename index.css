@@ -1,0 +1,47 @@
+* {
+  text-align: center;
+  caret-color: transparent;
+  padding: 0;
+  margin: 5px 0;
+  font-family: monospace;
+}
+
+*:focus { outline: none; }
+
+.title { font-size: 32px; }
+
+header { padding: 2px 0 6px; }
+
+input {
+  border: 3px solid black;
+  border-radius: 3px;
+  width: 60px;
+  height: 60px;
+  font-size: 42px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 15px;
+  color: #555;
+}
+
+.cold {
+  background-color: transparent;
+  border-color: black;
+}
+
+.warm {
+  background-color: rgb(181, 159, 59);
+  border-color: transparent;
+}
+
+.hot {
+  background-color: rgb(83, 141, 78);
+  border-color: transparent;
+}
+
+input:focus {
+  box-shadow: 3px 3px;
+}
